@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TreeGenerator</string>
+    <string name="do_not_support_message">Dein Gerät unterstützt nicht OpenGL ES 2.0 .</string>
+</resources>

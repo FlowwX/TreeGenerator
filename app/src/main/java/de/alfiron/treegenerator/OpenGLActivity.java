@@ -9,8 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 public class OpenGLActivity extends Activity {
 
     private GLSurfaceView glSurfaceView;
@@ -44,7 +42,7 @@ public class OpenGLActivity extends Activity {
 
             //glSurfaceView.setEGLConfigChooser(8,8,8,8,16,0);
             // Assign our renderer.
-            glSurfaceView.setRenderer(new FirstOpenGLProjectRenderer());
+            glSurfaceView.setRenderer(new TreeGeneratorRenderer(this));
             rendererSet = true;
         } else {
             Toast.makeText(this, getString(R.string.do_not_support_message),

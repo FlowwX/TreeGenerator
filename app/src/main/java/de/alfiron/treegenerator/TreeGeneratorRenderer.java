@@ -10,6 +10,7 @@ import java.nio.FloatBuffer;
 import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.GL_FLOAT;
 import static android.opengl.GLES20.GL_TRIANGLES;
+import static android.opengl.GLES20.GL_TRIANGLE_FAN;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 import static android.opengl.GLES20.glDrawArrays;
@@ -31,13 +32,14 @@ import static android.opengl.Matrix.translateM;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import de.alfiron.treegenerator.objects.ObjectBuilder;
 import de.alfiron.treegenerator.util.LoggerConfig;
 import de.alfiron.treegenerator.util.ShaderHelper;
 import de.alfiron.treegenerator.util.TextRessourceReader;
 
 class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
 
-    private static final int POSITION_COMPONENT_COUNT = 4;
+    public static final int POSITION_COMPONENT_COUNT = 3;
     private static final int BYTES_PER_FLOAT = 4;
     private final FloatBuffer vertexData;
 
@@ -55,24 +57,14 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
 
-
-
+    private float[] tableVerticesWithTriangles;
+    private float[] coneTop;
 
     TreeGeneratorRenderer( Context context ) {
         this.context = context;
 
-        float[] tableVerticesWithTriangles = {
-
-                // Triangle 1
-                -0.5f, -0.5f, 0f, 1f,
-                0.5f, 0.5f, 0f, 1f,
-                -0.5f, 0.5f, 0f, 1f,
-
-                // Triangle 2
-                -0.5f, -0.5f, 0f, 1f,
-                0.5f, -0.5f, 0f, 1f,
-                0.5f, 0.5f, 0f, 1f
-        };
+        tableVerticesWithTriangles = ObjectBuilder.generateCircleVertexData(32);
+        coneTop = ObjectBuilder.generateCircleVertexData(32);
 
         vertexData = ByteBuffer
                 .allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)
@@ -118,11 +110,11 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
         glViewport(0, 0, width, height);
 
         final float aspectRatio = (float)width / (float)height;
-        perspectiveM(projectionMatrix, 0, 80, aspectRatio, 1f, 10f);
+        perspectiveM(projectionMatrix, 0, 90, aspectRatio, 1f, 10f);
 
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, 0f, 0f, -2f);
-       rotateM(modelMatrix, 0, -45f, 1f, 0f,0f);
+        rotateM(modelMatrix, 0,  15f, 1f, 0f,0f);
 
         final float[] temp = new float[16];
         multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
@@ -135,6 +127,6 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
 
         glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0);
         glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, tableVerticesWithTriangles.length/POSITION_COMPONENT_COUNT);
     }
 }

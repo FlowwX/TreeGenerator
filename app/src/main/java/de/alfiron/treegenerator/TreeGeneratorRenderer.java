@@ -32,16 +32,19 @@ import static android.opengl.Matrix.translateM;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import de.alfiron.treegenerator.objects.Circle;
+import de.alfiron.treegenerator.objects.ConeFrustum;
 import de.alfiron.treegenerator.objects.ObjectBuilder;
 import de.alfiron.treegenerator.util.LoggerConfig;
+import de.alfiron.treegenerator.util.Point;
 import de.alfiron.treegenerator.util.ShaderHelper;
 import de.alfiron.treegenerator.util.TextRessourceReader;
 
-class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
+public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
 
     public static final int POSITION_COMPONENT_COUNT = 3;
-    private static final int BYTES_PER_FLOAT = 4;
-    private final FloatBuffer vertexData;
+    public static final int BYTES_PER_FLOAT = 4;
+    private FloatBuffer vertexData;
 
     private final Context context;
     private int program;
@@ -57,22 +60,22 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
 
-    private float[] tableVerticesWithTriangles;
-    private float[] coneTop;
+
+
+
+    //Objects
+    private Circle circleTop;
+    private Circle circleBottom;
+    private ConeFrustum coneFrustum;
 
     TreeGeneratorRenderer( Context context ) {
         this.context = context;
 
-        tableVerticesWithTriangles = ObjectBuilder.generateCircleVertexData(32);
-        coneTop = ObjectBuilder.generateCircleVertexData(32);
 
-        vertexData = ByteBuffer
-                .allocateDirect(tableVerticesWithTriangles.length * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer();
+        //circleTop = new Circle(new Point(0,0.4f,0),0.3f);
+        //circleBottom = new Circle(new Point(0,0,0),1);
 
-        vertexData.put(tableVerticesWithTriangles);
-
+        coneFrustum = new ConeFrustum(new Point(0,0,0),0.3f,1f, 0.4f );
     }
 
     @Override
@@ -97,10 +100,9 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
         uColorLocation = glGetUniformLocation(program, U_COLOR);
         aPositionLocation = glGetAttribLocation(program, A_POSITION);
 
-        //connect data with openGL
-        vertexData.position(0);
-        glVertexAttribPointer(aPositionLocation, POSITION_COMPONENT_COUNT, GL_FLOAT, false, 0, vertexData);
-        glEnableVertexAttribArray(aPositionLocation);
+
+
+
 
 
     }
@@ -125,8 +127,13 @@ class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
     public void onDrawFrame(GL10 gl10) {
         glClear(GL_COLOR_BUFFER_BIT);
 
+
         glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0);
         glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, tableVerticesWithTriangles.length/POSITION_COMPONENT_COUNT);
+
+        coneFrustum.draw();
+        //circleTop.draw();
+        //circleBottom.draw();
+
     }
 }

@@ -29,7 +29,7 @@ public class ObjectBuilder {
             double angleInRadians = ( (float) i / (float) size) * Math.PI * 2f;
             vertexData[index++] = centerX + (float) (radius * Math.cos(angleInRadians));
             vertexData[index++] = centerY;
-            vertexData[index++] = centerZ + (float) (radius * Math.sin(angleInRadians));;
+            vertexData[index++] = centerZ + (float) (radius * Math.sin(angleInRadians));
         }
 
         return vertexData;

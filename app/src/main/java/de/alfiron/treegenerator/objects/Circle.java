@@ -7,7 +7,7 @@ import static de.alfiron.treegenerator.TreeGeneratorRenderer.POSITION_COMPONENT_
 
 public class Circle extends Object3D{
 
-    public static final int AMOUNT_POINTS = 16;
+    public static final int AMOUNT_POINTS = 32;
 
     private Point center;
     private float radius;
@@ -39,5 +39,10 @@ public class Circle extends Object3D{
             vertices[index++] = center.getZ() + (float) (radius * Math.sin(angleInRadians));
         }
         return vertices;
+    }
+
+    @Override
+    public float[] calcNormals() {
+        return new float[0];
     }
 }

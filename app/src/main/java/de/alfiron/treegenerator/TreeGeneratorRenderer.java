@@ -50,7 +50,10 @@ public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
     private int program;
 
     private static final String U_COLOR = "u_Color";
-    private int uColorLocation;
+
+
+
+    private static int uColorLocation;
 
     private static final String A_POSITION = "a_Position";
     private int aPositionLocation;
@@ -59,6 +62,7 @@ public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
     private int uMatrixLocation;
     private final float[] projectionMatrix = new float[16];
     private final float[] modelMatrix = new float[16];
+
 
 
 
@@ -75,7 +79,7 @@ public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
         //circleTop = new Circle(new Point(0,0.4f,0),0.3f);
         //circleBottom = new Circle(new Point(0,0,0),1);
 
-        coneFrustum = new ConeFrustum(new Point(0,0,0),0.3f,1f, 0.4f );
+        coneFrustum = new ConeFrustum(new Point(0,0,0f),0.3f,1f, 0.4f );
     }
 
     @Override
@@ -112,11 +116,11 @@ public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
         glViewport(0, 0, width, height);
 
         final float aspectRatio = (float)width / (float)height;
-        perspectiveM(projectionMatrix, 0, 90, aspectRatio, 1f, 10f);
+        perspectiveM(projectionMatrix, 0, 45, aspectRatio, 1f, 10f);
 
         setIdentityM(modelMatrix, 0);
-        translateM(modelMatrix, 0, 0f, 0f, -2f);
-        rotateM(modelMatrix, 0,  15f, 1f, 0f,0f);
+        translateM(modelMatrix, 0, 0f, 0f, -5f);
+        rotateM(modelMatrix, 0,  40f, 1f, 0f,0f);
 
         final float[] temp = new float[16];
         multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);
@@ -129,11 +133,19 @@ public class TreeGeneratorRenderer implements GLSurfaceView.Renderer {
 
 
         glUniformMatrix4fv(uMatrixLocation, 1, false, projectionMatrix, 0);
-        glUniform4f(uColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+        glUniform4f(uColorLocation, 0f, 1f, 0f, 1.0f);
 
         coneFrustum.draw();
         //circleTop.draw();
         //circleBottom.draw();
 
     }
+
+
+
+
+    public static int getuColorLocation() {
+        return uColorLocation;
+    }
+
 }

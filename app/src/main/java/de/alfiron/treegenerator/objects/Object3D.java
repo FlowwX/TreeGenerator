@@ -16,7 +16,7 @@ import static de.alfiron.treegenerator.TreeGeneratorRenderer.POSITION_COMPONENT_
 public abstract class Object3D {
 
     private FloatBuffer vertexData;
-    private float[] vertices;
+    protected float[] vertices;
     private int aPositionLocation;
 
     protected int drawMode = GL_TRIANGLES;
@@ -45,4 +45,5 @@ public abstract class Object3D {
     }
 
     abstract public float[] buildVertices();
+    abstract public float[] calcNormals();
 }

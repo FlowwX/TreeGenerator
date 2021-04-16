@@ -1,11 +1,15 @@
 package de.alfiron.treegenerator.objects;
 
 import java.util.Arrays;
+import java.util.Vector;
 
+import de.alfiron.treegenerator.TreeGeneratorRenderer;
 import de.alfiron.treegenerator.util.Point;
 
 import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
-import static de.alfiron.treegenerator.TreeGeneratorRenderer.POSITION_COMPONENT_COUNT;
+import static android.opengl.GLES20.glUniform4f;
+
+
 
 public class ConeFrustum extends Object3D{
 
@@ -13,6 +17,7 @@ public class ConeFrustum extends Object3D{
 
     private Circle topCircle;
     private Circle bottomCircle;
+
 
     public ConeFrustum( Point centerBottom, float rTop, float rBottom, float height ) {
         this.centerBottom = centerBottom;
@@ -53,5 +58,44 @@ public class ConeFrustum extends Object3D{
         }
 
         return vertices;
+    }
+
+    @Override
+    public float[] calcNormals() {
+
+        int index = 3;
+        while( hasNextReferencePoint( index ) ){
+            float[] a = getVector( new Point(0f,0f,0f), new Point(0,0,0) );
+            float[] b = getVector( new Point(0f,0f,0f), new Point(0,0,0) );
+
+        }
+
+        return new float[0];
+    }
+
+    public boolean hasNextReferencePoint( int index ){
+        return index < this.vertices.length;
+    }
+
+    public float[] getVector(Point pPoi, Point pRef){
+        float[] v = new float[3];
+            v[0] = pRef.getX() - pPoi.getX();
+            v[1] = pRef.getY() - pPoi.getY();
+            v[2] = pRef.getZ() - pPoi.getZ();
+        return v;
+    }
+
+    public float[] dotProduct(){
+        float[] normal = new float[3];
+        return normal;
+    }
+
+
+    @Override
+    public void draw() {
+        super.draw();
+
+        glUniform4f(TreeGeneratorRenderer.getuColorLocation(), 1f, 0f, 0f, 0);
+        topCircle.draw();
     }
 }

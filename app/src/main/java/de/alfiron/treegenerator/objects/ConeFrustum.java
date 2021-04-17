@@ -61,16 +61,20 @@ public class ConeFrustum extends Object3D{
     }
 
     @Override
-    public float[] calcNormals() {
+    public float[][] calcNormals() {
+
+        float normals[][] = new float[3][3];
 
         int index = 3;
         while( hasNextReferencePoint( index ) ){
             float[] a = getVector( new Point(0f,0f,0f), new Point(0,0,0) );
             float[] b = getVector( new Point(0f,0f,0f), new Point(0,0,0) );
 
+            dotProduct( a, b );
+
         }
 
-        return new float[0];
+        return normals;
     }
 
     public boolean hasNextReferencePoint( int index ){
@@ -85,8 +89,13 @@ public class ConeFrustum extends Object3D{
         return v;
     }
 
-    public float[] dotProduct(){
+    public float[] dotProduct( float[] a, float[] b ){
         float[] normal = new float[3];
+
+        normal[0] = a[1]*b[2] - b[1]*a[2];
+        normal[1] = a[2]*b[0] - b[2]*a[0];
+        normal[2] = a[0]*b[1] - b[0]*a[1];
+
         return normal;
     }
 

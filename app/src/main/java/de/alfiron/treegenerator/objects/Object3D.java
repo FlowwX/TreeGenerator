@@ -45,5 +45,5 @@ public abstract class Object3D {
     }
 
     abstract public float[] buildVertices();
-    abstract public float[] calcNormals();
+    abstract public float[][] calcNormals();
 }
